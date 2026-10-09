@@ -1,12 +1,3 @@
-"""MCP server exposing tools over a sample dataset of job postings.
-
-Tools:
-  - search_postings_by_skill: find jobs that require a given skill
-  - count_postings_by_company: count how many postings each company has
-  - list_companies: list unique companies in the dataset
-  - get_posting: fetch a single posting by id
-"""
-
 from __future__ import annotations
 
 from typing import Annotated, Any
@@ -15,10 +6,6 @@ from pydantic import BaseModel, Field
 
 from mcp.server import MCPServer
 from mcp.types import ToolAnnotations
-
-# ---------------------------------------------------------------------------
-# Sample dataset (in production this would come from a DB or API)
-# ---------------------------------------------------------------------------
 
 JOB_POSTINGS: list[dict[str, Any]] = [
     {
@@ -134,10 +121,6 @@ JOB_POSTINGS: list[dict[str, Any]] = [
 ]
 
 
-# ---------------------------------------------------------------------------
-# Response models (structured output for clients)
-# ---------------------------------------------------------------------------
-
 class JobPostingSummary(BaseModel):
     id: str
     title: str
@@ -164,10 +147,6 @@ class CountByCompanyResult(BaseModel):
     total_postings: int
     companies: list[CompanyCount]
 
-
-# ---------------------------------------------------------------------------
-# Server
-# ---------------------------------------------------------------------------
 
 mcp = MCPServer("Job Postings")
 
@@ -206,7 +185,6 @@ def search_postings_by_skill(
     """
     skill_norm = skill.strip().lower()
     if not skill_norm:
-        # Extra guard; Pydantic min_length already rejects empty strings
         raise ValueError("skill must not be empty or whitespace-only")
 
     matches: list[dict[str, Any]] = []
@@ -317,7 +295,6 @@ def get_posting(
                 salary_max=job["salary_max"],
                 remote=job["remote"],
             )
-    # Raised exceptions become tool-level errors the model can read and recover from.
     raise ValueError(
         f"No job posting found with id={job_id!r}. "
         "Valid IDs look like 'job-001' through 'job-010'. "
@@ -326,6 +303,4 @@ def get_posting(
 
 
 if __name__ == "__main__":
-    # Default transport is stdio (what most MCP hosts expect).
-    # For HTTP: mcp.run(transport="streamable-http", port=8000)
     mcp.run()
