@@ -5,6 +5,7 @@ from typing import Annotated, Any
 from pydantic import BaseModel, Field
 
 from mcp.server import MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
 from mcp.types import ToolAnnotations
 
 JOB_POSTINGS: list[dict[str, Any]] = [
@@ -184,9 +185,6 @@ def search_postings_by_skill(
     Results are ordered by highest max salary first.
     """
     skill_norm = skill.strip().lower()
-    if not skill_norm:
-        raise ValueError("skill must not be empty or whitespace-only")
-
     matches: list[dict[str, Any]] = []
     for job in JOB_POSTINGS:
         skills_lower = [s.lower() for s in job["skills"]]
@@ -295,7 +293,7 @@ def get_posting(
                 salary_max=job["salary_max"],
                 remote=job["remote"],
             )
-    raise ValueError(
+    raise ToolError(
         f"No job posting found with id={job_id!r}. "
         "Valid IDs look like 'job-001' through 'job-010'. "
         "Call list_companies or search_postings_by_skill first to discover IDs."
