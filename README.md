@@ -1,6 +1,7 @@
 # MCP Job Postings Server
 
 A small [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server built with the official Python SDK (`mcp`). It exposes tools over a sample dataset of tech job postings so an AI assistant can search and aggregate openings.
+[![M8ven Score](https://m8ven.ai/badge/mcp/andylaique-mcp-job-postings-server-1htyze?v=019e23cf1df806f52e39e1c3a75064c3)](https://m8ven.ai/mcp/andylaique-mcp-job-postings-server-1htyze?s=readme)
 
 ## Tools
 
@@ -153,7 +154,3 @@ demo_client.py     # In-memory client that exercises the tools
 README.md          # This file
 pyproject.toml     # Dependencies (mcp[cli])
 ```
-
-## License
-
-MIT
